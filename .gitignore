@@ -1,0 +1,5 @@
+*.json
+*.png
+*.storyboard
+Minesweeper.xcodeproj/*
+MinesweeperTests/*
