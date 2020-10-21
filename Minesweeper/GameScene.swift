@@ -15,33 +15,32 @@ class GameScene: SKScene {
     private let gridgroup = GridGroup()
     private var scale : CGFloat!
     var board : Board!
-    var isLongPressing = false
 
     override func didMove(to view: SKView) {
         setupBoard(10, 10)
         self.scale = gridgroup.scale
         
-        let gesture: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(longPress:)))
-
-        gesture.minimumPressDuration = 0.5
-
-        self.view!.addGestureRecognizer(gesture)
+        let longgesture: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+        
+        longgesture.minimumPressDuration = 0.5
+        
+        self.view!.addGestureRecognizer(longgesture)
     }
     
-    @objc func longPressed(longPress: UIGestureRecognizer) {
-
-        if (longPress.state == UIGestureRecognizer.State.ended) {
-            self.isLongPressing = false
-        }else if (longPress.state == UIGestureRecognizer.State.began) {
-            var l = longPress.location(in: self.view!)
-            l.x = l.x / self.scale
-            l.y = l.y / self.scale
-            let col = self.board.tileColumnIndex(fromPosition: l)
-            let row = self.board.tileRowIndex(fromPosition: l)
-            print("Col \(col), row \(row)")
-        }
-        
+    @objc func longPressed(sender: UIGestureRecognizer) {
+//        var touchLocation = sender.location(in: sender.view)
+//        touchLocation = self.convertPoint(fromView: touchLocation)
+//        touchLocation.x = touchLocation.x / self.scale
+//        touchLocation.y = touchLocation.y / self.scale
+//        let col = self.board.tileColumnIndex(fromPosition: touchLocation)
+//        let row = self.board.tileRowIndex(fromPosition: touchLocation)
+//        if (sender.state == UIGestureRecognizer.State.ended) {
+//            print("Long press ended!")
+//        }else if (sender.state == UIGestureRecognizer.State.began) {
+//            print("Long press!")
+//        }
     }
+
     
     
     private func setupBoard(_ rows: Int, _ cols: Int) -> Void {
@@ -68,16 +67,13 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isLongPressing {
-            handleReveal(touches)
-        }
+        handleReveal(touches)
     }
     
     // MARK: Handles Touch Reveal
     private func handleReveal(_ touches: Set<UITouch>) {
         for touch in touches {
             let location = touch.location(in: self)
-            print("Touch location is \(location)")
             let touchNode = atPoint(location)
             if touchNode.name == "Board" {
                 guard let grid = touchNode as? SKTileMapNode else {return}
@@ -108,6 +104,10 @@ class GameScene: SKScene {
             revealGrid(at: row - 1, at: col)
             revealGrid(at: row, at: col - 1)
             revealGrid(at: row, at: col + 1)
+            revealGrid(at: row + 1, at: col + 1)
+            revealGrid(at: row + 1, at: col - 1)
+            revealGrid(at: row - 1, at: col + 1)
+            revealGrid(at: row - 1, at: col - 1)
         } else if self.board.boardNumber[row][col] != 0{
             self.board.visitedPosition[col][row] = true
             let number = self.board.boardNumber[row][col]

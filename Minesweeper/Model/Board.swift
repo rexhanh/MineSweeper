@@ -36,7 +36,11 @@ class Board : SKTileMapNode{
     
     private func generateMines() {
         for _ in 0..<self.numberOfMines {
-            self.minePositions.append(CGPoint(x: Int.random(in: 0..<self.numberOfColumns), y: Int.random(in: 0..<self.numberOfRows)))
+            var randomPosition = CGPoint(x: Int.random(in: 0..<self.numberOfColumns), y: Int.random(in: 0..<self.numberOfRows))
+            while self.minePositions.contains(randomPosition) {
+                randomPosition = CGPoint(x: Int.random(in: 0..<self.numberOfColumns), y: Int.random(in: 0..<self.numberOfRows))
+            }
+            self.minePositions.append(randomPosition)
         }
         // Debug use
 //        self.minePositions.append(CGPoint(x: 2, y: 3))
