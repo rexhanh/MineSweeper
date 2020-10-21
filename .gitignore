@@ -3,3 +3,4 @@
 *.storyboard
 Minesweeper.xcodeproj/*
 MinesweeperTests/*
+*.xcuserstate
